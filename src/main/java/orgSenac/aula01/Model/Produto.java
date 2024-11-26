@@ -24,7 +24,7 @@ public class Produto {
     @Column(columnDefinition = "TEXT")
     private String url;
 
-    private String teste;
+    private String teste2;
 
     // Construtor padrão
     public Produto() {
