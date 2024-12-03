@@ -25,7 +25,8 @@ public class ProdutoController {
     private ProdutoRepository repository;
 
     @GetMapping
-    public List<Produto> get(@RequestParam(required = false, defaultValue = "nome") String order) {
+    public List<Produto> get(@RequestParam(required = false, defaultValue = "nome") String order,
+                            @RequestParam(required = false) String filter) {
         Sort s = Sort.by(order);
         switch (order) {
             case "valor_mais_alto":
@@ -34,15 +35,19 @@ public class ProdutoController {
             case "valor_mais_baixo":
                 s = Sort.by(Sort.Order.asc("preco"));
                 break;
-            case "nome": // Padrão por nome
+            case "nome":
             default:
                 s = Sort.by(Sort.Order.asc("nome"));
                 break;
         }
     
-        return repository.findAll(s);
-    }    
+        if (filter == null) {
+            return repository.findAll(s);
+        }
+        return repository.findByNomeContains(filter, s);
+    
 
+    }
 
     @PostMapping
     public Produto save(@RequestBody Produto produto) {
